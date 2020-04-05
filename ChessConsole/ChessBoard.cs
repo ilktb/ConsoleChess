@@ -185,6 +185,18 @@ namespace ChessConsole
             EnPassant = null;
             EnPassantCapture = null;
 
+            OrderWhiteChessPieces();
+
+            OrderBlackChessPieces();
+
+            foreach (Piece piece in pieces)
+            {
+                piece.Recalculate();
+            }
+        }
+
+        private void OrderWhiteChessPieces()
+        {
             AddPiece(cells[0, 0], new Rook(PlayerColor.White));
             AddPiece(cells[1, 0], new Knight(PlayerColor.White));
             AddPiece(cells[2, 0], new Bishop(PlayerColor.White));
@@ -194,24 +206,14 @@ namespace ChessConsole
             AddPiece(cells[6, 0], new Knight(PlayerColor.White));
             AddPiece(cells[7, 0], new Rook(PlayerColor.White));
 
-            AddPiece(cells[0, 1], new Pawn(PlayerColor.White));
-            AddPiece(cells[1, 1], new Pawn(PlayerColor.White));
-            AddPiece(cells[2, 1], new Pawn(PlayerColor.White));
-            AddPiece(cells[3, 1], new Pawn(PlayerColor.White));
-            AddPiece(cells[4, 1], new Pawn(PlayerColor.White));
-            AddPiece(cells[5, 1], new Pawn(PlayerColor.White));
-            AddPiece(cells[6, 1], new Pawn(PlayerColor.White));
-            AddPiece(cells[7, 1], new Pawn(PlayerColor.White));
+            for (int i = 0; i <= 7; i++)
+            {
+                AddPiece(cells[i, 1], new Pawn(PlayerColor.White));
+            }            
+        }
 
-            AddPiece(cells[0, 6], new Pawn(PlayerColor.Black));
-            AddPiece(cells[1, 6], new Pawn(PlayerColor.Black));
-            AddPiece(cells[2, 6], new Pawn(PlayerColor.Black));
-            AddPiece(cells[3, 6], new Pawn(PlayerColor.Black));
-            AddPiece(cells[4, 6], new Pawn(PlayerColor.Black));
-            AddPiece(cells[5, 6], new Pawn(PlayerColor.Black));
-            AddPiece(cells[6, 6], new Pawn(PlayerColor.Black));
-            AddPiece(cells[7, 6], new Pawn(PlayerColor.Black));
-
+        private void OrderBlackChessPieces()
+        {
             AddPiece(cells[0, 7], new Rook(PlayerColor.Black));
             AddPiece(cells[1, 7], new Knight(PlayerColor.Black));
             AddPiece(cells[2, 7], new Bishop(PlayerColor.Black));
@@ -221,9 +223,9 @@ namespace ChessConsole
             AddPiece(cells[6, 7], new Knight(PlayerColor.Black));
             AddPiece(cells[7, 7], new Rook(PlayerColor.Black));
 
-            foreach (Piece piece in pieces)
+            for (int i = 0; i <= 7; i++)
             {
-                piece.Recalculate();
+                AddPiece(cells[i, 6], new Pawn(PlayerColor.Black));
             }
         }
 
@@ -273,7 +275,7 @@ namespace ChessConsole
         /// <returns></returns>
         private bool IsMoveLegal(Piece piece, Cell move)
         {
-            Piece currentKing = piece.Color == PlayerColor.White ? whiteKing : blackKing; 
+            Piece currentKing = piece.Color == PlayerColor.White ? whiteKing : blackKing;
             //The strategy is to try everything that can fail and return true only if nothing fails
 
             //If it's the king check if it moved into a check (or didn't move out that's really the same thing)
