@@ -66,7 +66,7 @@ namespace ChessConsole
             Running = true;
             board = new ChessBoard();
             currentPlayer = PlayerColor.White;
-            turnStart();
+            TurnStart();
         }
 
         #region PublicInterfaceCommands
@@ -95,11 +95,11 @@ namespace ChessConsole
                         promoteOption++;
                 }
                 else if (keyInfo.Key == ConsoleKey.Enter)
-                    interact();
+                    Interact();
                 else if (keyInfo.Key == ConsoleKey.D)
-                    debugInteract();
+                    DebugInteract();
                 else if (keyInfo.Key == ConsoleKey.Escape)
-                    cancel();
+                    Cancel();
             }
         }
         private bool CanCursorBeMovedLeft(ConsoleKeyInfo keyInfo)
@@ -209,7 +209,7 @@ namespace ChessConsole
         /// <summary>
         /// Happens when the user presses the enter key
         /// </summary>
-        private void interact()
+        private void Interact()
         {
             switch (playerState)
             {
@@ -237,13 +237,13 @@ namespace ChessConsole
                     }
 
                     if (board.IsPromotable(holdedNode, moveTo))
-                        showPromote();
+                        ShowPromote();
                     else
-                        turnOver();
+                        TurnOver();
                     
                     break;
                 case PlayerState.AwaitPromote:
-                    turnOver();
+                    TurnOver();
                     break;
                 case PlayerState.GameOver:
                     Running = false;
@@ -253,7 +253,7 @@ namespace ChessConsole
 
 
         private Piece debugPiece;
-        private void debugInteract()
+        private void DebugInteract()
         {
             debugPiece = board.GetCell(cursorX, cursorY).Piece;
         }
@@ -261,7 +261,7 @@ namespace ChessConsole
         /// <summary>
         /// Happens when the user presses the escape key
         /// </summary>
-        private void cancel()
+        private void Cancel()
         {
             playerState = PlayerState.Idle;
             holdedNode = null;
@@ -273,7 +273,7 @@ namespace ChessConsole
         /// <summary>
         /// Called on every turn start
         /// </summary>
-        private void turnStart()
+        private void TurnStart()
         {
             board.TurnStart(currentPlayer);
         }
@@ -281,7 +281,7 @@ namespace ChessConsole
         /// <summary>
         /// Shows promotion dialog (set's the state)
         /// </summary>
-        private void showPromote()
+        private void ShowPromote()
         {
             playerState = PlayerState.AwaitPromote;
             promoteOption = PromoteOptions.Queen; //reset the menu
@@ -290,14 +290,14 @@ namespace ChessConsole
         /// <summary>
         /// Called when the turn is passed to the other player
         /// </summary>
-        private void turnOver()
+        private void TurnOver()
         {
             board.Move(holdedNode, moveTo, promoteOption);
             holdedNode = null;
             moveTo = null;
             playerState = PlayerState.Idle;
             currentPlayer = currentPlayer == PlayerColor.White ? PlayerColor.Black : PlayerColor.White;
-            turnStart();
+            TurnStart();
         }
         #endregion
     }

@@ -29,9 +29,9 @@ namespace ChessConsole.Pieces
                     yield return cell;
                 }
 
-                if (canHit(hits[0]))
+                if (CanHit(hits[0]))
                     yield return hits[0];
-                if (canHit(hits[1]))
+                if (CanHit(hits[1]))
                     yield return hits[1];
             }
         }
@@ -58,10 +58,10 @@ namespace ChessConsole.Pieces
 
         public override char Char => 'P';
 
-        protected override bool canHit(ChessBoard.Cell cell)
+        protected override bool CanHit(ChessBoard.Cell cell)
         {
             //Handling en passant over here
-            return base.canHit(cell) || (cell != null && cell == cell.Parent.EnPassant);
+            return base.CanHit(cell) || (cell != null && cell == cell.Parent.EnPassant);
         }
     }
 }

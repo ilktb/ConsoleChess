@@ -35,7 +35,7 @@ namespace ChessConsole
 
         /// <summary>
         /// All the moves legal to make with this piece. It's a subset of <see cref="PossibleMoves"/>.
-        /// See also <seealso cref="ChessBoard.isMoveLegal(Piece, ChessBoard.Cell)"/>.
+        /// See also <seealso cref="ChessBoard.IsMoveLegal(Piece, ChessBoard.Cell)"/>.
         /// </summary>
         public List<ChessBoard.Cell> LegalMoves
         {
@@ -91,7 +91,7 @@ namespace ChessConsole
 
         public abstract char Char { get; }
 
-        protected virtual bool canHit(ChessBoard.Cell cell)
+        protected virtual bool CanHit(ChessBoard.Cell cell)
         {
             return cell != null && cell.Piece != null && cell.Piece.Color != Color;
         }
