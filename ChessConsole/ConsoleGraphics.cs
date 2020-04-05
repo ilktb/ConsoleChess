@@ -9,7 +9,9 @@ namespace ChessConsole
     {
         public ConsoleColor Foreground;
         public ConsoleColor Background;
-
+        /// <summary>
+        /// Actual character value
+        /// </summary>
         public char C;
 
         public CChar(char c = ' ', ConsoleColor foreground = ConsoleColor.White, ConsoleColor background = ConsoleColor.Black)

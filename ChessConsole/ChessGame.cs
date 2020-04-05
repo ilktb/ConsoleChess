@@ -76,20 +76,20 @@ namespace ChessConsole
             {
                 ConsoleKeyInfo keyInfo = Console.ReadKey(true);
 
-                if (keyInfo.Key == ConsoleKey.LeftArrow && cursorX > 0 && playerState != PlayerState.AwaitPromote)
+                if (CanCursorBeMovedLeft(keyInfo))
                     cursorX--;
-                else if (keyInfo.Key == ConsoleKey.RightArrow && cursorX < 7 && playerState != PlayerState.AwaitPromote)
+                else if (CanCursorBeMovedRight(keyInfo))
                     cursorX++;
-                else if (keyInfo.Key == ConsoleKey.UpArrow)
+                else if (CanCursorBeMovedUp(keyInfo))
                 {
-                    if (playerState != PlayerState.AwaitPromote && cursorY < 7)
+                    if (IsDownBorder())
                         cursorY++;
                     else if ((int)promoteOption > 0)
                         promoteOption--;
                 }
-                else if (keyInfo.Key == ConsoleKey.DownArrow)
+                else if (CanCursorBeMovedDown(keyInfo))
                 {
-                    if (playerState != PlayerState.AwaitPromote && cursorY > 0)
+                    if (IsUpBorder())
                         cursorY--;
                     else if ((int)promoteOption < 3)
                         promoteOption++;
@@ -102,7 +102,30 @@ namespace ChessConsole
                     cancel();
             }
         }
-
+        private bool CanCursorBeMovedLeft(ConsoleKeyInfo keyInfo)
+        {
+            return keyInfo.Key == ConsoleKey.LeftArrow && cursorX > 0 && playerState != PlayerState.AwaitPromote;
+        }
+        private bool CanCursorBeMovedRight(ConsoleKeyInfo keyInfo)
+        {
+            return keyInfo.Key == ConsoleKey.RightArrow && cursorX < 7 && playerState != PlayerState.AwaitPromote;
+        }
+        private bool CanCursorBeMovedUp(ConsoleKeyInfo keyInfo)
+        {
+            return keyInfo.Key == ConsoleKey.UpArrow;
+        }
+        private bool CanCursorBeMovedDown(ConsoleKeyInfo keyInfo)
+        {
+            return keyInfo.Key == ConsoleKey.DownArrow;
+        }
+        private bool IsDownBorder()
+        {
+            return playerState != PlayerState.AwaitPromote && cursorY < 7;
+        }
+        private bool IsUpBorder()
+        {
+            return playerState != PlayerState.AwaitPromote && cursorY > 0;
+        }
         /// <summary>
         /// Draws the game
         /// </summary>
