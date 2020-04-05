@@ -136,7 +136,7 @@ namespace ChessConsole
             const int yCoordinateArea = 5;
             const int boardSize = 8;
 
-            g.FillArea(new CChar(' ', ConsoleColor.Black, ConsoleColor.DarkGray), xCoordinateArea, yCoordinateArea, boardSize, boardSize);
+            g.FillAreaColoredCharacter(new CChar(' ', ConsoleColor.Black, ConsoleColor.DarkGray), xCoordinateArea, yCoordinateArea, boardSize, boardSize);
 
             //boardSize-1 - j (7-j) everywhere cuz it's reversed in chess
             for (int i = 0; i < boardSize; i++)
@@ -147,15 +147,15 @@ namespace ChessConsole
                     ChessBoard.Cell cell = board.GetCell(i, j);
                     if (cell.Piece != null)
                     {
-                        g.DrawTransparent(cell.Piece.Char, (cell.Piece.Color == PlayerColor.White) ? ConsoleColor.White : ConsoleColor.Black, xCoordinateArea + i, yCoordinateArea + (boardSize - 1 - j));
+                        g.DrawTransparentBackground(cell.Piece.Char, (cell.Piece.Color == PlayerColor.White) ? ConsoleColor.White : ConsoleColor.Black, xCoordinateArea + i, yCoordinateArea + (boardSize - 1 - j));
                         if (cell.Piece.LegalMoves.Count == 0)
                         {
-                            g.SetBackground(ConsoleColor.DarkRed, xCoordinateArea + i, yCoordinateArea + (boardSize - 1 - j));
+                            g.SetBackgroundColor(ConsoleColor.DarkRed, xCoordinateArea + i, yCoordinateArea + (boardSize - 1 - j));
                         }
                     }
 
                     if (cell.HitBy.Contains(debugPiece))
-                        g.SetBackground(ConsoleColor.DarkMagenta, xCoordinateArea + i, yCoordinateArea + (boardSize - 1 - j));
+                        g.SetBackgroundColor(ConsoleColor.DarkMagenta, xCoordinateArea + i, yCoordinateArea + (boardSize - 1 - j));
                 }
             }
 
@@ -164,12 +164,12 @@ namespace ChessConsole
                 //Highlight legal moves
                 foreach (ChessBoard.Cell move in holdedNode.Piece.LegalMoves)
                 {
-                    g.SetBackground(ConsoleColor.DarkGreen, xCoordinateArea + move.X, yCoordinateArea + (boardSize - 1 - move.Y));
+                    g.SetBackgroundColor(ConsoleColor.DarkGreen, xCoordinateArea + move.X, yCoordinateArea + (boardSize - 1 - move.Y));
                 }
             }
 
             //Sets the cursor color -> yellow
-            g.SetBackground(ConsoleColor.DarkYellow, xCoordinateArea + cursorX, yCoordinateArea + (boardSize - 1 - cursorY));
+            g.SetBackgroundColor(ConsoleColor.DarkYellow, xCoordinateArea + cursorX, yCoordinateArea + (boardSize - 1 - cursorY));
 
             //TODO: Remove en passant testing
             /*if (board.EnPassant != null)
@@ -183,7 +183,7 @@ namespace ChessConsole
             {
                 for (int j = 0; j < boardSize; j++)
                 {
-                    if ((i + j) % 2 == 1) g.LightenBackground(xCoordinateArea + i, yCoordinateArea + j);
+                    if ((i + j) % 2 == 1) g.LightenBackgroundColor(xCoordinateArea + i, yCoordinateArea + j);
                 }
             }
 
@@ -191,10 +191,10 @@ namespace ChessConsole
 
             if (playerState == PlayerState.AwaitPromote)
             {
-                g.DrawTextTrasparent("Queen", promoteOption == PromoteOptions.Queen ? ConsoleColor.Yellow : ConsoleColor.White, 22, 7);
-                g.DrawTextTrasparent("Rook", promoteOption == PromoteOptions.Rook ? ConsoleColor.Yellow : ConsoleColor.White, 22, 9);
-                g.DrawTextTrasparent("Bishop", promoteOption == PromoteOptions.Bishop ? ConsoleColor.Yellow : ConsoleColor.White, 22, 11);
-                g.DrawTextTrasparent("Knight", promoteOption == PromoteOptions.Knight ? ConsoleColor.Yellow : ConsoleColor.White, 22, 13);
+                g.DrawTextTrasparentBackground("Queen", promoteOption == PromoteOptions.Queen ? ConsoleColor.Yellow : ConsoleColor.White, 22, 7);
+                g.DrawTextTrasparentBackground("Rook", promoteOption == PromoteOptions.Rook ? ConsoleColor.Yellow : ConsoleColor.White, 22, 9);
+                g.DrawTextTrasparentBackground("Bishop", promoteOption == PromoteOptions.Bishop ? ConsoleColor.Yellow : ConsoleColor.White, 22, 11);
+                g.DrawTextTrasparentBackground("Knight", promoteOption == PromoteOptions.Knight ? ConsoleColor.Yellow : ConsoleColor.White, 22, 13);
             }
             else
             {
