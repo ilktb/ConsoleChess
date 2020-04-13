@@ -55,14 +55,14 @@ namespace ChessConsole.Pieces
         public override void Recalculate()
         {
             //If moved castling is not possible anymore an we should also remove listeners
-            if (!Moved)
+            if (!IsMoved)
             {
                 //Set it to true we'll set it to false if it wasn't true
                 canCastleLeft = true;
 
                 //Checks if the left rook is still in place and haven't moved yet
                 ChessBoard.Cell leftRookCell = Parent.Parent.GetCell(0, (Color == PlayerColor.White) ? 0 : 7);
-                if (leftRookCell.Piece == null || !(leftRookCell.Piece is Rook) || leftRookCell.Piece.Color != Color || leftRookCell.Piece.Moved)
+                if (leftRookCell.Piece == null || !(leftRookCell.Piece is Rook) || leftRookCell.Piece.Color != Color || leftRookCell.Piece.IsMoved)
                     canCastleLeft = false;
                 else
                 {
@@ -79,7 +79,7 @@ namespace ChessConsole.Pieces
 
                 //Checks if the right rook is still in place and haven't moved yet
                 ChessBoard.Cell rightRookCell = Parent.Parent.GetCell(7, (Color == PlayerColor.White) ? 0 : 7);
-                if (rightRookCell.Piece == null || !(rightRookCell.Piece is Rook) || rightRookCell.Piece.Color != Color || rightRookCell.Piece.Moved)
+                if (rightRookCell.Piece == null || !(rightRookCell.Piece is Rook) || rightRookCell.Piece.Color != Color || rightRookCell.Piece.IsMoved)
                     canCastleRight = false;
                 else
                 {

@@ -21,7 +21,7 @@ namespace ChessConsole.Pieces
         public Queen(Piece promote)
             : this(promote.Color)
         {
-            Moved = promote.Moved;
+            IsMoved = promote.IsMoved;
         }
 
         public override IEnumerable<ChessBoard.Cell> PossibleMoves

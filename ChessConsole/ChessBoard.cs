@@ -171,10 +171,11 @@ namespace ChessConsole
         /// </summary>
         public void Reset()
         {
-            cells = new Cell[8, 8];
-            for (int i = 0; i < 8; i++)
+            int boardSize = 8;
+            cells = new Cell[boardSize, boardSize];
+            for (int i = 0; i < boardSize; i++)
             {
-                for (int j = 0; j < 8; j++)
+                for (int j = 0; j < boardSize; j++)
                 {
                     cells[i, j] = new Cell(this, i, j);
                 }
@@ -213,7 +214,7 @@ namespace ChessConsole
                     AddPiece(cells[i, 1], new Pawn(PlayerColor.White));
                 }
             }
-            else if (color==PlayerColor.Black)
+            else if (color == PlayerColor.Black)
             {
                 AddPiece(cells[0, 7], new Rook(PlayerColor.Black));
                 AddPiece(cells[1, 7], new Knight(PlayerColor.Black));
@@ -229,7 +230,7 @@ namespace ChessConsole
                     AddPiece(cells[i, 6], new Pawn(PlayerColor.Black));
                 }
             }
-                        
+
         }
 
         /// <summary>
@@ -239,8 +240,6 @@ namespace ChessConsole
         /// <returns>Whether the player had any moves</returns>
         public bool TurnStart(PlayerColor currentPlayer)
         {
-            inCheck = IsInCheck(currentPlayer, false);
-            bool anyLegalMove = false;
             //Clear cell hit lists
             foreach (Cell cell in cells)
             {
@@ -254,6 +253,8 @@ namespace ChessConsole
             }
 
             //Calculate legal moves
+            bool anyLegalMove = false;
+
             foreach (Piece piece in pieces)
             {
                 piece.LegalMoves.Clear();
@@ -278,7 +279,6 @@ namespace ChessConsole
         /// <returns></returns>
         private bool IsMoveLegal(Piece piece, Cell move)
         {
-            Piece currentKing = piece.Color == PlayerColor.White ? whiteKing : blackKing;
             //The strategy is to try everything that can fail and return true only if nothing fails
 
             //If it's the king check if it moved into a check (or didn't move out that's really the same thing)
@@ -308,6 +308,8 @@ namespace ChessConsole
             }
             else //Non-king pieces
             {
+                Piece currentKing = piece.Color == PlayerColor.White ? whiteKing : blackKing;
+
                 if (inCheck) //If player is in in check and if move resolves that
                 {
                     //Let's try capturing or blocking the attacker, keep in mind that we can't unblock another attacker

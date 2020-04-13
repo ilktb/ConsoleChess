@@ -19,7 +19,7 @@ namespace ChessConsole
         /// <summary>
         /// False by default, set to true upon first move
         /// </summary>
-        public bool Moved
+        public bool IsMoved
         {
             protected set;
             get;
@@ -52,7 +52,7 @@ namespace ChessConsole
         public Piece(PlayerColor color)
         {
             Color = color;
-            Moved = false;
+            IsMoved = false;
             LegalMoves = new List<ChessBoard.Cell>();
         }
 
@@ -72,7 +72,7 @@ namespace ChessConsole
         public void OnMove(ChessBoard.Cell cell)
         {
             Parent = cell;
-            Moved = true;
+            IsMoved = true;
         }
 
         /// <summary>
