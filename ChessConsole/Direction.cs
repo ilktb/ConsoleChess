@@ -93,7 +93,7 @@ namespace ChessConsole
         /// <summary>
         /// Tells if the direction should update the hit graph of possible move cells
         /// </summary>
-        private bool updateHitGraph;
+        private bool updateHitGraph = false;
 
         public Direction(Piece piece, int x, int y, int desiredCount = 8, bool updateHitGraph = true)
         {
