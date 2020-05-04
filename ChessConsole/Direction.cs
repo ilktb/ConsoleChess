@@ -4,49 +4,29 @@ using System.Linq;
 
 namespace ChessConsole
 {
-    /// <summary>
-    /// Contains possible moves and handles line of sight checks
-    /// </summary>
     public class Direction
     {
-        /// <summary>
-        /// The piece whose moves are represented by this object
-        /// </summary>
+
         public Piece Piece
         {
             private set;
             get;
         }
 
-        /// <summary>
-        /// The X-direction
-        /// </summary>
         public int X
         {
             private set;
             get;
         }
 
-        /// <summary>
-        /// The Y-direction
-        /// </summary>
         public int Y
         {
             private set;
             get;
         }
 
-        /// <summary>
-        /// The possible moves you can make in this direction including the line of sight blocking piece that may or may not be hittable.
-        /// See also <seealso cref="GetPossibleMoves"/>
-        /// </summary>
         private List<ChessBoard.Cell> possibleMoves;
 
-        /// <summary>
-        /// The possible moves you can make in this direction
-        /// </summary>
-        /// <param name="enemyHittable">Are the enemy pieces hittable</param>
-        /// <returns>An enumeration of possible moves</returns>
         public IEnumerable<ChessBoard.Cell> GetPossibleMoves(bool enemyHittable = true)
         {
             if (possibleMoves.Count == 0)
@@ -63,11 +43,6 @@ namespace ChessConsole
                 yield return possibleMoves.Last();
         }
 
-        /// <summary>
-        /// The count of possible moves
-        /// </summary>
-        /// <param name="enemyHittable">Are the enemy pieces hittable</param>
-        /// <returns>The count of possible moves</returns>
         public int GetPossibleMoveCount(bool enemyHittable = true)
         {
             if (possibleMoves.Count == 0)
@@ -90,9 +65,6 @@ namespace ChessConsole
             get;
         }
 
-        /// <summary>
-        /// Tells if the direction should update the hit graph of possible move cells
-        /// </summary>
         private bool updateHitGraph = false;
 
         public Direction(Piece piece, int x, int y, int desiredCount = 8, bool updateHitGraph = true)
@@ -113,19 +85,10 @@ namespace ChessConsole
             }
         }
 
-        /// <summary>
-        /// Tells if the moved piece on the cell changed the hit state of the blocked 
-        /// </summary>
-        /// <param name="from">Where the piece stands right now</param>
-        /// <param name="to">Where the piece is moved</param>
-        /// <param name="blocked">Hit tests this piece</param>
-        /// <returns>If blocked is hittable after moving the from</returns>
         public bool IsBlockedIfMove(ChessBoard.Cell from, ChessBoard.Cell to, ChessBoard.Cell blocked)
         {
             if (possibleMoves.Contains(blocked) && !possibleMoves.Contains(to))
             {
-                //The blocked is hittable to begin with and we don't block it with a new blocker
-                //To may still equal blocked but direction should not care about that
                 return false;
             }
             else if (possibleMoves.Contains(from))
@@ -145,8 +108,6 @@ namespace ChessConsole
                     }
                 }
             }
-
-            //Happens when the blocker was not cotained and the blocked was not contained a perfect combination for nothing happening
             return true;
         }
     }
