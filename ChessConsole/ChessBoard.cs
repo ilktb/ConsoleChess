@@ -6,42 +6,22 @@ using System.Linq;
 
 namespace ChessConsole
 {
-    /// <summary>
-    /// Provides the data structure and algorithms for dealing with a chess board
-    /// </summary>
     public class ChessBoard
     {
-        /// <summary>
-        /// Represents one chess cell in the <seealso cref="ChessBoard.cells"/>
-        /// </summary>
         public class Cell
         {
-            /// <summary>
-            /// The parent chess board
-            /// </summary>
             public ChessBoard Parent
             {
                 private set;
                 get;
             }
 
-            /// <summary>
-            /// 0-7 -> A-H mapping on an actual chessboard 
-            /// </summary>
-            public int X;
-            /// <summary>
-            /// 0-7 -> 1-8 mapping on an actual chessboard
-            /// </summary>
-            public int Y;
+            public int X; // 0-7 -> A-H mapping on an actual chessboard 
 
-            /// <summary>
-            /// The piece present at the cell (can be null). Should only be set by <see cref="ChessBoard"/>.
-            /// </summary>
+            public int Y; // 0-7 -> 1-8 mapping on an actual chessboard
+
             public Piece Piece;
 
-            /// <summary>
-            /// All the pieces that can hit this cell.
-            /// </summary>
             public List<Piece> HitBy;
 
             public Cell(ChessBoard parent, int x, int y)
@@ -52,20 +32,13 @@ namespace ChessConsole
                 Y = y;
             }
 
-            /// <summary>
-            /// Returns cells on the board in a relative direction to this one.
-            /// </summary>
-            /// <param name="dirX">The X-direction component in which to search</param>
-            /// <param name="dirY">The Y-direction component in which to search</param>
             /// <param name="desiredCount">The ammount of consecutive cells to return (until outside of the board)</param>
-            /// <returns>Collection of cells which are in the line of sight</returns>
-            public IEnumerable<Cell> OpenLineOfSight(int dirX, int dirY, int desiredCount = 1)
+            public IEnumerable<Cell> OpenLineOfSight(int directionX, int directionY, int desiredCount = 1)
             {
                 for (int i = 1; i <= desiredCount; i++)
                 {
-                    //Query the parent for a cell, if null the cell is out of the board and we should stop
-                    Cell cell = Parent.GetCell(X + dirX * i, Y + dirY * i);
-                    if (cell == null) yield break;
+                    Cell cell = Parent.GetCell(X + directionX * i, Y + directionY * i);
+                    if (cell == null) yield break; //the cell is out of the board
 
                     yield return cell;
 
@@ -83,20 +56,13 @@ namespace ChessConsole
             /// <returns>Node at (x, y) position or null if index is out of bounds</returns>
             public Cell Open(int x, int y)
             {
-                //Query the parent for a cell, if null the cell is out of the board and we should not return
                 Cell cell = Parent.GetCell(X + x, Y + y);
                 return cell ?? null;
             }
         }
 
-        /// <summary>
-        /// Contains information about the cells and the links between them
-        /// </summary>
         private Cell[,] cells;
 
-        /// <summary>
-        /// The cell to hit for en passant
-        /// </summary>
         public Cell EnPassant
         {
             private set;
@@ -113,32 +79,19 @@ namespace ChessConsole
             get;
         }
 
-        /// <summary>
-        /// List holding all the existing pieces
-        /// </summary>
         private List<Piece> pieces = new List<Piece>();
 
         private Piece blackKing;
         private Piece whiteKing;
-
-        /// <summary>
-        /// Caches the <see cref = "IsInCheck" /> method's result
-        /// </summary>
         private bool inCheck;
 
         public ChessBoard()
         {
-            Reset();
+            ResetBoardState();
         }
 
         #region Getters
 
-        /// <summary>
-        /// Get cell by absolute coordinates
-        /// </summary>
-        /// <param name="x">Absolute X-coord</param>
-        /// <param name="y">Absolute Y-coord</param>
-        /// <returns>Node at (x, y) position or null if index is out of bounds</returns>
         public Cell GetCell(int x, int y)
         {
             if (x < 0 || cells.GetLength(0) <= x || y < 0 || cells.GetLength(1) <= y) return null;
@@ -150,11 +103,6 @@ namespace ChessConsole
 
         #region HelperMethods
 
-        /// <summary>
-        /// Adds a piece in the beggining of the chess game, can also be used for promotion
-        /// </summary>
-        /// <param name="cell">The cell to add to</param>
-        /// <param name="piece"></param>
         private void AddPiece(Cell cell, Piece piece)
         {
             cell.Piece = piece;
@@ -166,10 +114,7 @@ namespace ChessConsole
 
         #region InterfaceMethods
 
-        /// <summary>
-        /// Resets the board state
-        /// </summary>
-        public void Reset()
+        public void ResetBoardState()
         {
             int boardSize = 8;
             cells = new Cell[boardSize, boardSize];
@@ -233,26 +178,18 @@ namespace ChessConsole
 
         }
 
-        /// <summary>
-        /// Called at the start of every turn. Recalcualtes legal moves.
-        /// </summary>
-        /// <param name="currentPlayer">The player whose turn is to move</param>
-        /// <returns>Whether the player had any moves</returns>
         public bool TurnStart(PlayerColor currentPlayer)
         {
-            //Clear cell hit lists
             foreach (Cell cell in cells)
             {
                 cell.HitBy.Clear();
             }
 
-            //Recalculate possible moves and hit lists for cells
             foreach (Piece piece in pieces)
             {
                 piece.Recalculate();
             }
 
-            //Calculate legal moves
             bool anyLegalMove = false;
 
             foreach (Piece piece in pieces)
@@ -271,17 +208,10 @@ namespace ChessConsole
             return anyLegalMove;
         }
 
-        /// <summary>
-        /// Validates if a move is legal for a given piece
-        /// </summary>
-        /// <param name="piece">Piece to move</param>
-        /// <param name="move">Where the piece moves</param>
-        /// <returns></returns>
         private bool IsMoveLegal(Piece piece, Cell move)
         {
             //The strategy is to try everything that can fail and return true only if nothing fails
 
-            //If it's the king check if it moved into a check (or didn't move out that's really the same thing)
             if (piece is King)
             {
                 //If some enemy hits where we move we can't move with the king
@@ -306,11 +236,11 @@ namespace ChessConsole
                     }
                 }
             }
-            else //Non-king pieces
+            else
             {
                 Piece currentKing = piece.Color == PlayerColor.White ? whiteKing : blackKing;
 
-                if (inCheck) //If player is in in check and if move resolves that
+                if (inCheck)
                 {
                     //Let's try capturing or blocking the attacker, keep in mind that we can't unblock another attacker
                     foreach (Piece hitter in currentKing.Parent.HitBy)
@@ -323,12 +253,10 @@ namespace ChessConsole
                     }
                 }
 
-                //Check if a blocker moving away results in a check
-                //This also prevents pieces capturing an attacker and exposing the king to another
                 foreach (Piece hitter in piece.Parent.HitBy)
                 {
-                    if (hitter.Color == currentKing.Color) continue; //If it's the same color we don't care
-                    if (hitter.Parent == move) continue; //If we hit it it can not block
+                    if (hitter.Color == currentKing.Color) continue;
+                    if (hitter.Parent == move) continue;
 
                     if (!hitter.IsBlockedIfMove(piece.Parent, move, currentKing.Parent))
                         return false;
@@ -339,39 +267,25 @@ namespace ChessConsole
             return true;
         }
 
-        /// <summary>
-        /// Checks if a player is currently in check (their king can be hit)
-        /// </summary>
-        /// <param name="player">The player's color to check</param>
-        /// <param name="useCache">Uses the cached value for the current turn</param>
-        /// <returns></returns>
-        public bool IsInCheck(PlayerColor player, bool useCache = true)
+        public bool IsInCheck(PlayerColor playerColor, bool useCache = true)
         {
             if (useCache)
                 return inCheck;
 
-            if (player == PlayerColor.White)
-                return whiteKing.Parent.HitBy.Any(hitter => hitter.Color != player);
+            if (playerColor == PlayerColor.White)
+                return whiteKing.Parent.HitBy.Any(hitter => hitter.Color != playerColor);
             else
-                return blackKing.Parent.HitBy.Any(hitter => hitter.Color != player);
+                return blackKing.Parent.HitBy.Any(hitter => hitter.Color != playerColor);
         }
 
-        /// <summary>
-        /// Move a piece from one cell the the other, after this function is called the turn MUST end
-        /// </summary>
-        /// <param name="from">Node where the moved piece is</param>
-        /// <param name="to">Node to move to</param>
-        /// <param name="promoteOption">The option chosed when promoting a pawn, will be ignored if the movement does not involve pormotion.</param>
         public void Move(Cell from, Cell to, PromoteOptions promoteOption)
         {
-            //Capture a piece if moved on it
             if (to.Piece != null)
                 pieces.Remove(to.Piece);
 
             to.Piece = from.Piece;
             from.Piece = null;
 
-            //Handles en passant captures
             if (to == EnPassant && to.Piece is Pawn)
             {
                 pieces.Remove(EnPassantCapture.Piece);
@@ -387,7 +301,7 @@ namespace ChessConsole
             //Castling to the left
             if (to.Piece is King && to.X - from.X == -2)
             {
-                Move(GetCell(0, to.Y), GetCell(to.X + 1, to.Y), promoteOption); //Move the rook as well
+                Move(GetCell(0, to.Y), GetCell(to.X + 1, to.Y), promoteOption);
             }
 
             //Handles promotion
@@ -434,12 +348,6 @@ namespace ChessConsole
             }
         }
 
-        /// <summary>
-        /// Is a piece (usually a pawn) promotable if it's moving from a cell to another
-        /// </summary>
-        /// <param name="from">The cell where the piece moves from</param>
-        /// <param name="to">The cell where the piece moves to</param>
-        /// <returns>Whether the piece on from is promotable</returns>
         public bool IsPromotable(Cell from, Cell to)
         {
             return from.Piece is Pawn && to.Y == (from.Piece.Color == PlayerColor.White ? 7 : 0);
