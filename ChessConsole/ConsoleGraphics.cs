@@ -12,18 +12,18 @@ namespace ChessConsole
         /// <summary>
         /// Actual character value
         /// </summary>
-        public char C;
+        public char caracterValue;
 
         public CChar(char c = ' ', ConsoleColor foreground = ConsoleColor.White, ConsoleColor background = ConsoleColor.Black)
         {
             Foreground = foreground;
             Background = background;
-            C = c;
+            caracterValue = c;
         }
 
         public bool Equals(CChar other)
         {
-            return other.Foreground == Foreground && other.Background == Background && other.C == C;
+            return other.Foreground == Foreground && other.Background == Background && other.caracterValue == caracterValue;
         }
 
         public static bool operator==(CChar lhs, CChar rhs)
@@ -37,9 +37,6 @@ namespace ChessConsole
         }
     }
 
-    /// <summary>
-    /// Handles double buffered C# console
-    /// </summary>
     public class ConsoleGraphics
     {
         /// <summary>
@@ -64,9 +61,6 @@ namespace ChessConsole
 
         #region DrawMethods
 
-        /// <summary>
-        /// Clears the back buffer, next SwapBuffer
-        /// </summary>
         public void ClearBackBuffer()
         {
             for (int i = 0; i < backBuffer.GetLength(0); i++)
@@ -78,37 +72,17 @@ namespace ChessConsole
             }
         }
 
-        /// <summary>
-        /// Draws a colored character to the back buffer
-        /// </summary>
-        /// <param name="cchar">The colored character to draw</param>
-        /// <param name="x">X-coord in console buffer</param>
-        /// <param name="y">Y-coord in console buffer</param>
         public void Draw(CChar cchar, int x, int y)
         {
             backBuffer[x, y] = cchar;
         }
 
-        /// <summary>
-        /// Draws a colored character to the back buffer, it doesn't change background color
-        /// </summary>
-        /// <param name="c">The character to draw</param>
-        /// <param name="foreground">Color of the character</param>
-        /// <param name="x">X-coord in console buffer</param>
-        /// <param name="y">Y-coord in console buffer</param>
         public void DrawTransparentBackground(char c, ConsoleColor foreground, int x, int y)
         {
-            backBuffer[x, y].C = c;
+            backBuffer[x, y].caracterValue = c;
             backBuffer[x, y].Foreground = foreground;
         }
 
-        /// <summary>
-        /// Draws an area of colored characters to the back buffer.
-        /// The arrays length is used as area width and height.
-        /// </summary>
-        /// <param name="cchars">The colored character area to draw</param>
-        /// <param name="x">Starting X-coord in console buffer</param>
-        /// <param name="y">Starting Y-coord in console buffer</param>
         public void DrawAreaColoredCharacters(CChar[,] cchars, int x, int y)
         {
             for (int i = 0; i < cchars.GetLength(0); i++)
@@ -126,9 +100,9 @@ namespace ChessConsole
         /// <param name="text">The text to draw</param>
         /// <param name="foreground">Foreground color of text</param>
         /// <param name="background">Background color of text</param>
-        /// <param name="x">Starting X-coord in console buffer</param>
-        /// <param name="y">Starting Y-coord in console buffer</param>
-        public void DrawText(string text, ConsoleColor foreground, ConsoleColor background, int x, int y)
+        /// <param name="startingConsoleCoordX">Starting X-coord in console buffer</param>
+        /// <param name="startingConsoleCoordY">Starting Y-coord in console buffer</param>
+        public void DrawText(string text, ConsoleColor foreground, ConsoleColor background, int startingConsoleCoordX, int startingConsoleCoordY)
         {
             CChar[,] area = new CChar[text.Length, 1];
             for (int i = 0; i < text.Length; i++)
@@ -136,16 +110,9 @@ namespace ChessConsole
                 area[i, 0] = new CChar(text[i], foreground, background);
             }
 
-            DrawAreaColoredCharacters(area, x, y);
+            DrawAreaColoredCharacters(area, startingConsoleCoordX, startingConsoleCoordY);
         }
 
-        /// <summary>
-        /// Draws text to the screen with a transparent background. Multiline is not handled.
-        /// </summary>
-        /// <param name="text">The text to draw</param>
-        /// <param name="foreground">Foreground color of text</param>
-        /// <param name="x">Starting X-coord in console buffer</param>
-        /// <param name="y">Starting Y-coord in console buffer</param>
         public void DrawTextTrasparentBackground(string text, ConsoleColor foreground, int x, int y)
         {
             CChar[,] area = new CChar[text.Length, 1];
@@ -157,15 +124,6 @@ namespace ChessConsole
             DrawAreaColoredCharacters(area, x, y);
         }
 
-        /// <summary>
-        /// Fills an area of the back buffer with one specic colored character
-        /// The arrays length is used as area width and height.
-        /// </summary>
-        /// <param name="cchar">The colored character area to draw</param>
-        /// <param name="x">Starting X-coord in console buffer</param>
-        /// <param name="y">Starting Y-coord in console buffer</param>
-        /// <param name="width">Width of the area</param>
-        /// <param name="height">Height of the area</param>
         public void FillAreaColoredCharacter(CChar cchar, int x, int y, int width, int height)
         {
             for (int i = 0; i < width; i++)
@@ -177,13 +135,6 @@ namespace ChessConsole
             }
         }
 
-        /// <summary>
-        /// Clears area on the screen
-        /// </summary>
-        /// <param name="x">Starting X-coord in console buffer</param>
-        /// <param name="y">Starting Y-coord in console buffer</param>
-        /// <param name="width">Width of the area</param>
-        /// <param name="height">Height of the area</param>
         public void ClearArea(int x, int y, int width, int height)
         {
             for (int i = 0; i < width; i++)
@@ -199,12 +150,6 @@ namespace ChessConsole
 
         #region Darken_Lighten
 
-        /// <summary>
-        /// Darkens the background color of a colored character in the back buffer.
-        /// If background color is already dark or no dark version exists it leaves it unchanged.
-        /// </summary>
-        /// <param name="x">X-coord in console buffer</param>
-        /// <param name="y">Y-coord in console buffer</param>
         public void DarkenBackgroundColor(int x, int y)
         {
             switch (backBuffer[x, y].Background)
@@ -233,12 +178,7 @@ namespace ChessConsole
             }
         }
 
-        /// <summary>
-        /// Darkens the foreground color of a colored character in the back buffer.
-        /// If foreground color is already dark or no dark version exists it leaves it unchanged.
-        /// </summary>
-        /// <param name="x">X-coord in console buffer</param>
-        /// <param name="y">Y-coord in console buffer</param>
+
         public void DarkenForegroundColor(int x, int y)
         {
             switch (backBuffer[x, y].Foreground)
@@ -267,12 +207,6 @@ namespace ChessConsole
             }
         }
 
-        /// <summary>
-        /// Lightens the background color of a colored character in the back buffer.
-        /// If background color is already light or no light version exists it leaves it unchanged.
-        /// </summary>
-        /// <param name="x">X-coord in console buffer</param>
-        /// <param name="y">Y-coord in console buffer</param>
         public void LightenBackgroundColor(int x, int y)
         {
             switch (backBuffer[x, y].Background)
@@ -301,12 +235,6 @@ namespace ChessConsole
             }
         }
 
-        /// <summary>
-        /// Lightens the foreground color of a colored character in the back buffer.
-        /// If foreground color is already light or no light version exists it leaves it unchanged.
-        /// </summary>
-        /// <param name="x">X-coord in console buffer</param>
-        /// <param name="y">Y-coord in console buffer</param>
         public void LightenForegroundColor(int x, int y)
         {
             switch (backBuffer[x, y].Foreground)
@@ -338,54 +266,28 @@ namespace ChessConsole
         #endregion
 
         #region Color Getters/Setters
-        /// <summary>
-        /// Sets the background color of the back buffer at (x, y)
-        /// </summary>
-        /// <param name="color">New background color</param>
-        /// <param name="x">X-coord in console buffer</param>
-        /// <param name="y">Y-coord in console buffer</param>
+
         public void SetBackgroundColor(ConsoleColor color, int x, int y)
         {
             backBuffer[x, y].Background = color;
         }
 
-        /// <summary>
-        /// Gets the background color of the back buffer at (x, y)
-        /// </summary>
-        /// <param name="x">X-coord in console buffer</param>
-        /// <param name="y">Y-coord in console buffer</param>
-        /// <returns>Background color at (x, y)</returns>
         public ConsoleColor GetBackgroundColor(int x, int y)
         {
             return backBuffer[x, y].Background;
         }
 
-        /// <summary>
-        /// Sets the foreground color of the back buffer at (x, y)
-        /// </summary>
-        /// <param name="color">New foreground color</param>
-        /// <param name="x">X-coord in console buffer</param>
-        /// <param name="y">Y-coord in console buffer</param>
         public void SetForegroundColor(ConsoleColor color, int x, int y)
         {
             backBuffer[x, y].Foreground = color;
         }
 
-        /// <summary>
-        /// Gets the foreground color of the back buffer at (x, y)
-        /// </summary>
-        /// <param name="x">X-coord in console buffer</param>
-        /// <param name="y">Y-coord in console buffer</param>
-        /// <returns>Foreground color at (x, y)</returns>
         public ConsoleColor GetForegroundColor(int x, int y)
         {
             return backBuffer[x, y].Foreground;
         }
         #endregion
 
-        /// <summary>
-        /// Overwrites the FrontBuffer and redraws the character if it's different from the BackBuffer
-        /// </summary>
         public void SwapBuffers()
         {
             for (int i = 0; i < backBuffer.GetLength(0); i++)
@@ -397,7 +299,7 @@ namespace ChessConsole
                         Console.SetCursorPosition(i, j);
                         Console.ForegroundColor = backBuffer[i, j].Foreground;
                         Console.BackgroundColor = backBuffer[i, j].Background;
-                        Console.Write(backBuffer[i, j].C);
+                        Console.Write(backBuffer[i, j].caracterValue);
                         frontBuffer[i, j] = backBuffer[i, j];
                     }
                 }
