@@ -20,9 +20,6 @@ namespace ChessConsole
 
     public class ChessGame
     {
-        /// <summary>
-        /// False indicates the game should exit
-        /// </summary>
         public bool Running
         {
             private set;
@@ -31,34 +28,16 @@ namespace ChessConsole
 
         private PlayerState playerState;
         
-        /// <summary>
-        /// Currently selected promote option
-        /// </summary>
         private PromoteOptions promoteOption;
 
-        /// <summary>
-        /// True for white, false for black
-        /// </summary>
         private PlayerColor currentPlayer;
         
-        /// <summary>
-        /// Coordinates for the virtual cursor on the board
-        /// </summary>
         private int cursorX, cursorY;
 
-        /// <summary>
-        /// The actual chess board
-        /// </summary>
         private ChessBoard board;
 
-        /// <summary>
-        /// Currently holded piece's parent cell
-        /// </summary>
-        private ChessBoard.Cell holdedNode = null;
+        private ChessBoard.Cell holdedParentNode = null;
 
-        /// <summary>
-        /// Where to move
-        /// </summary>
         private ChessBoard.Cell moveTo = null;
 
         public ChessGame()
@@ -126,6 +105,7 @@ namespace ChessConsole
         {
             return playerState != PlayerState.AwaitPromote && cursorY > 0;
         }
+
         /// <summary>
         /// Draws the game
         /// </summary>
@@ -159,10 +139,10 @@ namespace ChessConsole
                 }
             }
 
-            if (holdedNode != null && playerState == PlayerState.Holding)
+            if (holdedParentNode != null && playerState == PlayerState.Holding)
             {
                 //Highlight legal moves
-                foreach (ChessBoard.Cell move in holdedNode.Piece.LegalMoves)
+                foreach (ChessBoard.Cell move in holdedParentNode.Piece.LegalMoves)
                 {
                     g.SetBackgroundColor(ConsoleColor.DarkGreen, xCoordinateArea + move.X, yCoordinateArea + (boardSize - 1 - move.Y));
                 }
@@ -171,12 +151,6 @@ namespace ChessConsole
             //Sets the cursor color -> yellow
             g.SetBackgroundColor(ConsoleColor.DarkYellow, xCoordinateArea + cursorX, yCoordinateArea + (boardSize - 1 - cursorY));
 
-            //TODO: Remove en passant testing
-            /*if (board.EnPassant != null)
-                g.SetBackground(ConsoleColor.DarkCyan, 10 + board.EnPassant.X, 5 + (7 - board.EnPassant.Y));
-
-            if (board.EnPassantCapture != null)
-                g.SetBackground(ConsoleColor.DarkMagenta, 10 + board.EnPassantCapture.X, 5 + (7 - board.EnPassantCapture.Y));*/
 
             //Lighten for checkerboard pattern
             for (int i = 0; i < boardSize; i++)
@@ -206,19 +180,16 @@ namespace ChessConsole
 
         #region EventHandlerLikeMethods
 
-        /// <summary>
-        /// Happens when the user presses the enter key
-        /// </summary>
         private void Interact()
         {
             switch (playerState)
             {
                 case PlayerState.Idle:
-                    holdedNode = board.GetCell(cursorX, cursorY);
+                    holdedParentNode = board.GetCell(cursorX, cursorY);
 
-                    if (holdedNode.Piece == null || holdedNode.Piece.Color != currentPlayer || holdedNode.Piece.LegalMoves.Count == 0)
+                    if (holdedParentNode.Piece == null || holdedParentNode.Piece.Color != currentPlayer || holdedParentNode.Piece.LegalMoves.Count == 0)
                     {
-                        holdedNode = null;
+                        holdedParentNode = null;
                         return;
                     }
                     else playerState = PlayerState.Holding;
@@ -230,13 +201,13 @@ namespace ChessConsole
 
                     moveTo = board.GetCell(cursorX, cursorY);
 
-                    if (!holdedNode.Piece.LegalMoves.Contains(moveTo))
+                    if (!holdedParentNode.Piece.LegalMoves.Contains(moveTo))
                     {
                         moveTo = null;
                         return;
                     }
 
-                    if (board.IsPromotable(holdedNode, moveTo))
+                    if (board.IsPromotable(holdedParentNode, moveTo))
                         ShowPromote();
                     else
                         TurnOver();
@@ -258,42 +229,31 @@ namespace ChessConsole
             debugPiece = board.GetCell(cursorX, cursorY).Piece;
         }
 
-        /// <summary>
-        /// Happens when the user presses the escape key
-        /// </summary>
         private void Cancel()
         {
             playerState = PlayerState.Idle;
-            holdedNode = null;
+            holdedParentNode = null;
         }
 
         #endregion
 
         #region EventLikeMethods
-        /// <summary>
-        /// Called on every turn start
-        /// </summary>
+
         private void TurnStart()
         {
             board.TurnStart(currentPlayer);
         }
 
-        /// <summary>
-        /// Shows promotion dialog (set's the state)
-        /// </summary>
         private void ShowPromote()
         {
             playerState = PlayerState.AwaitPromote;
             promoteOption = PromoteOptions.Queen; //reset the menu
         }
 
-        /// <summary>
-        /// Called when the turn is passed to the other player
-        /// </summary>
         private void TurnOver()
         {
-            board.Move(holdedNode, moveTo, promoteOption);
-            holdedNode = null;
+            board.Move(holdedParentNode, moveTo, promoteOption);
+            holdedParentNode = null;
             moveTo = null;
             playerState = PlayerState.Idle;
             currentPlayer = currentPlayer == PlayerColor.White ? PlayerColor.Black : PlayerColor.White;
