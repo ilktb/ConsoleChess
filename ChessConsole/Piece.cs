@@ -59,7 +59,14 @@ namespace ChessConsole
 
         protected virtual bool CanHit(ChessBoard.Cell cell)
         {
-            return cell != null && cell.Piece != null && cell.Piece.Color != Color;
+            if (cell != null && cell.Piece != null)
+            {
+                if (cell.Piece.Color != Color)
+                {
+                    return true;
+                }
+            }
+            return  false;
         }
     }
 }

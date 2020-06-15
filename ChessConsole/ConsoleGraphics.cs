@@ -2,16 +2,11 @@
 
 namespace ChessConsole
 {
-    /// <summary>
-    /// Colored console character for the <see cref="ConsoleGraphics.backBuffer"/> and <see cref="ConsoleGraphics.frontBuffer"/>
-    /// </summary>
     public struct CChar : IEquatable<CChar>
     {
         public ConsoleColor Foreground;
         public ConsoleColor Background;
-        /// <summary>
-        /// Actual character value
-        /// </summary>
+   
         public char caracterValue;
 
         public CChar(char c = ' ', ConsoleColor foreground = ConsoleColor.White, ConsoleColor background = ConsoleColor.Black)
@@ -23,7 +18,14 @@ namespace ChessConsole
 
         public bool Equals(CChar other)
         {
-            return other.Foreground == Foreground && other.Background == Background && other.caracterValue == caracterValue;
+            if (other.Foreground == Foreground && other.Background == Background)
+            {
+                if (other.caracterValue == caracterValue)
+                {
+                    return true;
+                }
+            }
+            return false;
         }
 
         public static bool operator==(CChar lhs, CChar rhs)
@@ -39,16 +41,10 @@ namespace ChessConsole
 
     public class ConsoleGraphics
     {
-        /// <summary>
         /// First everything is drawn to the back buffer for double buffering purposes
-        /// you can "swap" buffers with <see cref="SwapBuffers"/>
-        /// </summary>
         private CChar[,] backBuffer;
 
-        /// <summary>
         /// Current console's colored character buffer
-        /// you can "swap" buffers with <see cref="SwapBuffers"/>
-        /// </summary>
         private CChar[,] frontBuffer;
 
         public ConsoleGraphics()
@@ -56,8 +52,6 @@ namespace ChessConsole
             backBuffer = new CChar[Console.BufferWidth, Console.BufferHeight];
             frontBuffer = new CChar[Console.BufferWidth, Console.BufferHeight];
         }
-
-
 
         #region DrawMethods
 
@@ -94,20 +88,12 @@ namespace ChessConsole
             }
         }
 
-        /// <summary>
-        /// Draws text to the screen. Multiline is not handled.
-        /// </summary>
-        /// <param name="text">The text to draw</param>
-        /// <param name="foreground">Foreground color of text</param>
-        /// <param name="background">Background color of text</param>
-        /// <param name="startingConsoleCoordX">Starting X-coord in console buffer</param>
-        /// <param name="startingConsoleCoordY">Starting Y-coord in console buffer</param>
-        public void DrawText(string text, ConsoleColor foreground, ConsoleColor background, int startingConsoleCoordX, int startingConsoleCoordY)
+        public void DrawText(string textToDraw, ConsoleColor foreground, ConsoleColor background, int startingConsoleCoordX, int startingConsoleCoordY)
         {
-            CChar[,] area = new CChar[text.Length, 1];
-            for (int i = 0; i < text.Length; i++)
+            CChar[,] area = new CChar[textToDraw.Length, 1];
+            for (int i = 0; i < textToDraw.Length; i++)
             {
-                area[i, 0] = new CChar(text[i], foreground, background);
+                area[i, 0] = new CChar(textToDraw[i], foreground, background);
             }
 
             DrawAreaColoredCharacters(area, startingConsoleCoordX, startingConsoleCoordY);

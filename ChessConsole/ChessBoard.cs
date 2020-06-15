@@ -48,13 +48,7 @@ namespace ChessConsole
                 }
             }
 
-            /// <summary>
-            /// Returns a cell on the board relative to this one.
-            /// </summary>
-            /// <param name="x">Relative X-coordinate of the cell</param>
-            /// <param name="y">Relative X-coordinate of the cell</param>
-            /// <returns>Node at (x, y) position or null if index is out of bounds</returns>
-            public Cell Open(int x, int y)
+            public Cell ReturnRelativeCell(int x, int y)
             {
                 Cell cell = Parent.GetCell(X + x, Y + y);
                 return cell ?? null;
@@ -73,7 +67,6 @@ namespace ChessConsole
         /// The cell where the pawn will be captured after en passant is performed
         /// </summary>
         public Cell EnPassantCapture
-
         {
             private set;
             get;
@@ -94,7 +87,14 @@ namespace ChessConsole
 
         public Cell GetCell(int x, int y)
         {
-            if (x < 0 || cells.GetLength(0) <= x || y < 0 || cells.GetLength(1) <= y) return null;
+            if (x < 0 || cells.GetLength(0) <= x)
+            {
+                return null;
+            }
+            if (y < 0 || cells.GetLength(1) <= y)
+            {
+                return null;
+            }
 
             return cells[x, y];
         }
@@ -307,7 +307,7 @@ namespace ChessConsole
             //Handles promotion
             if (to.Piece is Pawn && to.Y == (to.Piece.Color == PlayerColor.White ? 7 : 0))
             {
-                Piece promoted = null; //we have to set it to null cuz C# complains
+                Piece promoted = null; //set it to null because of C# complains
                 switch (promoteOption)
                 {
                     case PromoteOptions.Queen:
@@ -324,23 +324,18 @@ namespace ChessConsole
                         break;
                 }
 
-                //Update the list with the new promoted piece
                 pieces.Remove(to.Piece);
                 to.Piece = promoted;
-                promoted.OnPlace(to); //Place it otherwise weird bugs occur
+                promoted.OnPlace(to);
                 pieces.Add(promoted);
             }
 
-            //The code has to be in this exact order to prevent from listeners firing when we move into our own listened cells.
-            //Recalculate possible moves
             to.Piece.OnMove(to);
             to.Piece.Recalculate();
 
-            //Resets en passant
             EnPassant = null;
             EnPassantCapture = null;
 
-            //Handles en passant detection
             if (to.Piece is Pawn && Math.Abs(to.Y - from.Y) == 2)
             {
                 EnPassant = GetCell(to.X, (from.Y > to.Y) ? from.Y - 1 : from.Y + 1);

@@ -41,8 +41,8 @@ namespace ChessConsole.Pieces
             //Open forward direction and listen to it
             forward = new Direction(this, 0, (Color == PlayerColor.White) ? 1 : -1, IsMoved ? 1 : 2, false);
 
-            hits[0] = Parent.Open(-1, (Color == PlayerColor.White) ? 1 : -1);
-            hits[1] = Parent.Open( 1, (Color == PlayerColor.White) ? 1 : -1);
+            hits[0] = Parent.ReturnRelativeCell(-1, (Color == PlayerColor.White) ? 1 : -1);
+            hits[1] = Parent.ReturnRelativeCell( 1, (Color == PlayerColor.White) ? 1 : -1);
 
             if (hits[0] != null)
                 hits[0].HitBy.Add(this);

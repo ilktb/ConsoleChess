@@ -6,7 +6,6 @@ namespace ChessConsole
 {
     public class Direction
     {
-
         public Piece Piece
         {
             private set;
@@ -38,9 +37,13 @@ namespace ChessConsole
             }
 
             if (possibleMoves.Last().Piece == null)
+            {
                 yield return possibleMoves.Last();
+            }
             else if (enemyHittable && possibleMoves.Last().Piece.Color != Piece.Color)
+            {
                 yield return possibleMoves.Last();
+            }
         }
 
         public int GetPossibleMoveCount(bool enemyHittable = true)
@@ -49,16 +52,18 @@ namespace ChessConsole
                 return 0;
 
             if (possibleMoves.Last().Piece == null)
+            {
                 return possibleMoves.Count;
+            }
             else if (!enemyHittable || possibleMoves.Last().Piece.Color == Piece.Color)
+            {
                 return possibleMoves.Count - 1;
+            }
             else
                 return possibleMoves.Count;
         }
 
-        /// <summary>
         /// The number of moves that we could take, considering no blocking or out of board.
-        /// </summary>
         public int DesiredCount
         {
             private set;

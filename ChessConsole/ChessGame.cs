@@ -162,18 +162,17 @@ namespace ChessConsole
             }
 
             //Promotion option menu
-
-            if (playerState == PlayerState.AwaitPromote)
-            {
-                g.DrawTextTrasparentBackground("Queen", promoteOption == PromoteOptions.Queen ? ConsoleColor.Yellow : ConsoleColor.White, 22, 7);
-                g.DrawTextTrasparentBackground("Rook", promoteOption == PromoteOptions.Rook ? ConsoleColor.Yellow : ConsoleColor.White, 22, 9);
-                g.DrawTextTrasparentBackground("Bishop", promoteOption == PromoteOptions.Bishop ? ConsoleColor.Yellow : ConsoleColor.White, 22, 11);
-                g.DrawTextTrasparentBackground("Knight", promoteOption == PromoteOptions.Knight ? ConsoleColor.Yellow : ConsoleColor.White, 22, 13);
-            }
-            else
-            {
-                g.ClearArea(22, 7, 6, 7);
-            }
+            //if (playerState == PlayerState.AwaitPromote)
+            //{
+            //    g.DrawTextTrasparentBackground("Queen", promoteOption == PromoteOptions.Queen ? ConsoleColor.Yellow : ConsoleColor.White, 22, 7);
+            //    g.DrawTextTrasparentBackground("Rook", promoteOption == PromoteOptions.Rook ? ConsoleColor.Yellow : ConsoleColor.White, 22, 9);
+            //    g.DrawTextTrasparentBackground("Bishop", promoteOption == PromoteOptions.Bishop ? ConsoleColor.Yellow : ConsoleColor.White, 22, 11);
+            //    g.DrawTextTrasparentBackground("Knight", promoteOption == PromoteOptions.Knight ? ConsoleColor.Yellow : ConsoleColor.White, 22, 13);
+            //}
+            //else
+            //{
+            //    g.ClearArea(22, 7, 6, 7);
+            //}
         }
 
         #endregion
@@ -194,8 +193,9 @@ namespace ChessConsole
                     }
                     else playerState = PlayerState.Holding;
 
-
                     break;
+
+
                 case PlayerState.Holding:
                     playerState = PlayerState.Holding;
 
@@ -213,9 +213,12 @@ namespace ChessConsole
                         TurnOver();
                     
                     break;
+
+
                 case PlayerState.AwaitPromote:
                     TurnOver();
                     break;
+
                 case PlayerState.GameOver:
                     Running = false;
                     break;
