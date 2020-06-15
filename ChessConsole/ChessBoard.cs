@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Text;
 
 namespace ChessConsole
 {
@@ -273,9 +274,21 @@ namespace ChessConsole
                 return inCheck;
 
             if (playerColor == PlayerColor.White)
-                return whiteKing.Parent.HitBy.Any(hitter => hitter.Color != playerColor);
+            {
+                if (whiteKing.Parent.HitBy.Any(hitter => hitter.Color != playerColor))
+                {
+                    return true;
+                }
+                return false;
+            }
             else
-                return blackKing.Parent.HitBy.Any(hitter => hitter.Color != playerColor);
+            {
+                if (blackKing.Parent.HitBy.Any(hitter => hitter.Color != playerColor))
+                {
+                    return true;
+                }
+                return false;
+            }
         }
 
         public void Move(Cell from, Cell to, PromoteOptions promoteOption)

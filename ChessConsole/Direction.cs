@@ -46,7 +46,7 @@ namespace ChessConsole
             }
         }
 
-        public int GetPossibleMoveCount(bool enemyHittable = true)
+        public int GetPossibleMovesCount(bool enemyHittable = true)
         {
             if (possibleMoves.Count == 0)
                 return 0;
