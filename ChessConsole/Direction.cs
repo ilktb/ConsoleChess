@@ -25,42 +25,43 @@ namespace ChessConsole
         }
 
         private List<ChessBoard.Cell> possibleMoves;
+        public List<ChessBoard.Cell> PossibleMoves { get => possibleMoves; set => possibleMoves = value; }
 
         public IEnumerable<ChessBoard.Cell> GetPossibleMoves(bool enemyHittable = true)
         {
-            if (possibleMoves.Count == 0)
+            if (PossibleMoves.Count == 0)
                 yield break;
 
-            for (int i = 0; i < possibleMoves.Count - 1; i++)
+            for (int i = 0; i < PossibleMoves.Count - 1; i++)
             {
-                yield return possibleMoves[i];
+                yield return PossibleMoves[i];
             }
 
-            if (possibleMoves.Last().Piece == null)
+            if (PossibleMoves.Last().Piece == null)
             {
-                yield return possibleMoves.Last();
+                yield return PossibleMoves.Last();
             }
-            else if (enemyHittable && possibleMoves.Last().Piece.Color != Piece.Color)
+            else if (enemyHittable && PossibleMoves.Last().Piece.Color != Piece.Color)
             {
-                yield return possibleMoves.Last();
+                yield return PossibleMoves.Last();
             }
         }
 
         public int GetPossibleMovesCount(bool enemyHittable = true)
         {
-            if (possibleMoves.Count == 0)
+            if (PossibleMoves.Count == 0)
                 return 0;
 
-            if (possibleMoves.Last().Piece == null)
+            if (PossibleMoves.Last().Piece == null)
             {
-                return possibleMoves.Count;
+                return PossibleMoves.Count;
             }
-            else if (!enemyHittable || possibleMoves.Last().Piece.Color == Piece.Color)
+            else if (!enemyHittable || PossibleMoves.Last().Piece.Color == Piece.Color)
             {
-                return possibleMoves.Count - 1;
+                return PossibleMoves.Count - 1;
             }
             else
-                return possibleMoves.Count;
+                return PossibleMoves.Count;
         }
 
         /// The number of moves that we could take, considering no blocking or out of board.
@@ -80,10 +81,10 @@ namespace ChessConsole
             DesiredCount = desiredCount;
             this.updateHitGraph = updateHitGraph;
 
-            possibleMoves = new List<ChessBoard.Cell>();
-            possibleMoves.AddRange(piece.Parent.OpenLineOfSight(x, y, desiredCount));
+            PossibleMoves = new List<ChessBoard.Cell>();
+            PossibleMoves.AddRange(piece.Parent.OpenLineOfSight(x, y, desiredCount));
 
-            foreach (ChessBoard.Cell move in possibleMoves)
+            foreach (ChessBoard.Cell move in PossibleMoves)
             {
                 if (updateHitGraph)
                     move.HitBy.Add(Piece);
@@ -92,19 +93,19 @@ namespace ChessConsole
 
         public bool IsBlockedIfMove(ChessBoard.Cell from, ChessBoard.Cell to, ChessBoard.Cell blocked)
         {
-            if (possibleMoves.Contains(blocked) && !possibleMoves.Contains(to))
+            if (PossibleMoves.Contains(blocked) && !PossibleMoves.Contains(to))
             {
                 return false;
             }
-            else if (possibleMoves.Contains(from))
+            else if (PossibleMoves.Contains(from))
             {
-                int toIndex = possibleMoves.IndexOf(to);
-                if (0 <= toIndex && toIndex < possibleMoves.Count - 1)
-                    return true; //The blocker closer to the piece
+                int toIndex = PossibleMoves.IndexOf(to);
+                if (0 <= toIndex && toIndex < PossibleMoves.Count - 1)
+                    return true;
                 else
                 {
                     //If we moved further
-                    foreach (ChessBoard.Cell move in from.OpenLineOfSight(X, Y, DesiredCount - possibleMoves.Count))
+                    foreach (ChessBoard.Cell move in from.OpenLineOfSight(X, Y, DesiredCount - PossibleMoves.Count))
                     {
                         if (move == to) //The blocker moved into the new path
                             return true;
