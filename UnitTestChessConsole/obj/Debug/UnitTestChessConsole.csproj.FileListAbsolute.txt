@@ -1,0 +1,17 @@
+D:\DataStorage\SU\IVcourse\CleanCode\Chess\ConsoleChess-master\UnitTestChessConsole\bin\Debug\Microsoft.VisualStudio.TestPlatform.MSTest.TestAdapter.dll
+D:\DataStorage\SU\IVcourse\CleanCode\Chess\ConsoleChess-master\UnitTestChessConsole\bin\Debug\Microsoft.VisualStudio.TestPlatform.MSTestAdapter.PlatformServices.Interface.dll
+D:\DataStorage\SU\IVcourse\CleanCode\Chess\ConsoleChess-master\UnitTestChessConsole\bin\Debug\Microsoft.VisualStudio.TestPlatform.MSTestAdapter.PlatformServices.dll
+D:\DataStorage\SU\IVcourse\CleanCode\Chess\ConsoleChess-master\UnitTestChessConsole\bin\Debug\UnitTestChessConsole.dll
+D:\DataStorage\SU\IVcourse\CleanCode\Chess\ConsoleChess-master\UnitTestChessConsole\bin\Debug\UnitTestChessConsole.pdb
+D:\DataStorage\SU\IVcourse\CleanCode\Chess\ConsoleChess-master\UnitTestChessConsole\bin\Debug\ChessConsole.exe
+D:\DataStorage\SU\IVcourse\CleanCode\Chess\ConsoleChess-master\UnitTestChessConsole\bin\Debug\Microsoft.VisualStudio.TestPlatform.TestFramework.dll
+D:\DataStorage\SU\IVcourse\CleanCode\Chess\ConsoleChess-master\UnitTestChessConsole\bin\Debug\Microsoft.VisualStudio.TestPlatform.TestFramework.Extensions.dll
+D:\DataStorage\SU\IVcourse\CleanCode\Chess\ConsoleChess-master\UnitTestChessConsole\bin\Debug\ChessConsole.pdb
+D:\DataStorage\SU\IVcourse\CleanCode\Chess\ConsoleChess-master\UnitTestChessConsole\bin\Debug\ChessConsole.exe.config
+D:\DataStorage\SU\IVcourse\CleanCode\Chess\ConsoleChess-master\UnitTestChessConsole\bin\Debug\Microsoft.VisualStudio.TestPlatform.TestFramework.xml
+D:\DataStorage\SU\IVcourse\CleanCode\Chess\ConsoleChess-master\UnitTestChessConsole\bin\Debug\Microsoft.VisualStudio.TestPlatform.TestFramework.Extensions.xml
+D:\DataStorage\SU\IVcourse\CleanCode\Chess\ConsoleChess-master\UnitTestChessConsole\obj\Debug\UnitTestChessConsole.csprojAssemblyReference.cache
+D:\DataStorage\SU\IVcourse\CleanCode\Chess\ConsoleChess-master\UnitTestChessConsole\obj\Debug\UnitTestChessConsole.csproj.CoreCompileInputs.cache
+D:\DataStorage\SU\IVcourse\CleanCode\Chess\ConsoleChess-master\UnitTestChessConsole\obj\Debug\UnitTestChessConsole.csproj.CopyComplete
+D:\DataStorage\SU\IVcourse\CleanCode\Chess\ConsoleChess-master\UnitTestChessConsole\obj\Debug\UnitTestChessConsole.dll
+D:\DataStorage\SU\IVcourse\CleanCode\Chess\ConsoleChess-master\UnitTestChessConsole\obj\Debug\UnitTestChessConsole.pdb

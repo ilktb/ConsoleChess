@@ -29,7 +29,7 @@ namespace UnitTestChessConsole
         [TestMethod]
         public void TestGetPossibleMovesCount_WithTwoMoves()
         {
-            Direction direction = new Direction(new Pawn(PlayerColor.Black), 2, 3, 8, true);
+            Direction direction = new Direction(new Pawn(PlayerColor.Black), 2, 3, 7, true);
 
             bool enemyHittable = true;
             ChessBoard.Cell firstCell = new ChessBoard.Cell(new ChessBoard(), 1, 3);

@@ -78,6 +78,9 @@ namespace ChessConsole
         private Piece blackKing;
         private Piece whiteKing;
         private bool inCheck;
+        public Piece BlackKing { get => blackKing; set => blackKing = value; }
+        public Piece WhiteKing { get => whiteKing; set => whiteKing = value; }
+        public bool InCheck { get => inCheck; set => inCheck = value; }
 
         public ChessBoard()
         {
@@ -150,7 +153,7 @@ namespace ChessConsole
                 AddPiece(cells[1, 0], new Knight(PlayerColor.White));
                 AddPiece(cells[2, 0], new Bishop(PlayerColor.White));
                 AddPiece(cells[3, 0], new Queen(PlayerColor.White));
-                AddPiece(cells[4, 0], (whiteKing = new King(PlayerColor.White)));
+                AddPiece(cells[4, 0], (WhiteKing = new King(PlayerColor.White)));
                 AddPiece(cells[5, 0], new Bishop(PlayerColor.White));
                 AddPiece(cells[6, 0], new Knight(PlayerColor.White));
                 AddPiece(cells[7, 0], new Rook(PlayerColor.White));
@@ -166,7 +169,7 @@ namespace ChessConsole
                 AddPiece(cells[1, 7], new Knight(PlayerColor.Black));
                 AddPiece(cells[2, 7], new Bishop(PlayerColor.Black));
                 AddPiece(cells[3, 7], new Queen(PlayerColor.Black));
-                AddPiece(cells[4, 7], (blackKing = new King(PlayerColor.Black)));
+                AddPiece(cells[4, 7], (BlackKing = new King(PlayerColor.Black)));
                 AddPiece(cells[5, 7], new Bishop(PlayerColor.Black));
                 AddPiece(cells[6, 7], new Knight(PlayerColor.Black));
                 AddPiece(cells[7, 7], new Rook(PlayerColor.Black));
@@ -226,7 +229,7 @@ namespace ChessConsole
                 if (Math.Abs(move.X - piece.Parent.X) == 2)
                 {
                     //You can't castle in check
-                    if (inCheck)
+                    if (InCheck)
                         return false;
 
                     //Check if some enemy hits the middle castling
@@ -239,9 +242,9 @@ namespace ChessConsole
             }
             else
             {
-                Piece currentKing = piece.Color == PlayerColor.White ? whiteKing : blackKing;
+                Piece currentKing = piece.Color == PlayerColor.White ? WhiteKing : BlackKing;
 
-                if (inCheck)
+                if (InCheck)
                 {
                     //Let's try capturing or blocking the attacker, keep in mind that we can't unblock another attacker
                     foreach (Piece hitter in currentKing.Parent.HitBy)
@@ -271,11 +274,11 @@ namespace ChessConsole
         public bool IsInCheck(PlayerColor playerColor, bool useCache = true)
         {
             if (useCache)
-                return inCheck;
+                return InCheck;
 
             if (playerColor == PlayerColor.White)
             {
-                if (whiteKing.Parent.HitBy.Any(hitter => hitter.Color != playerColor))
+                if (WhiteKing.Parent.HitBy.Any(hitter => hitter.Color != playerColor))
                 {
                     return true;
                 }
@@ -283,7 +286,7 @@ namespace ChessConsole
             }
             else
             {
-                if (blackKing.Parent.HitBy.Any(hitter => hitter.Color != playerColor))
+                if (BlackKing.Parent.HitBy.Any(hitter => hitter.Color != playerColor))
                 {
                     return true;
                 }
@@ -358,8 +361,27 @@ namespace ChessConsole
 
         public bool IsPromotable(Cell from, Cell to)
         {
-            return from.Piece is Pawn && to.Y == (from.Piece.Color == PlayerColor.White ? 7 : 0);
+            int highestPossibleIndex = 7;
+            int lowestPossibleIndex = 0;
+
+            if (from.Piece is Pawn)
+            {
+                if (from.Piece.Color == PlayerColor.White)
+                {
+                    if (to.Y == highestPossibleIndex)
+                    {
+                        return true;
+                    }
+                    else if (to.Y == lowestPossibleIndex)
+                    {
+                        return true;
+                    }
+                }
+            }
+            return false;
         }
+
+
 
         #endregion
     }

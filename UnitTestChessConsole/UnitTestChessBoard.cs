@@ -11,29 +11,48 @@ namespace UnitTestChessConsole
     public class ChessBoardTests
     {
         [TestMethod]
-        public void TestTurnStart_CurrentPlayer()
+        public void TestTurnStart_whenCurrentPlayerIsWhite_AreThereAnyLegalMoves()
         {
             ChessBoard chessBoard = new ChessBoard();
             PlayerColor currentPlayer = new PlayerColor();
+            currentPlayer = PlayerColor.White;
             bool expected = true;
 
             bool result = chessBoard.TurnStart(currentPlayer);
 
-            Assert.AreEqual(expected, result, "Expected to be curPlayer but it is not");
+            Assert.AreEqual(expected, result, "CurrentPlayer has to have any legal moves");
         }
 
         [TestMethod]
-        public void TestIsInCheck_IfUseCacheIsFalse()
+        public void TestTurnStart_whenCurrentPlayerIsBlack_AreThereAnyLegalMoves()
         {
             ChessBoard chessBoard = new ChessBoard();
-            PlayerColor playerColor = PlayerColor.White;
+            PlayerColor currentPlayer = new PlayerColor();
+            currentPlayer = PlayerColor.Black;
+            bool expected = true;
+
+            bool result = chessBoard.TurnStart(currentPlayer);
+
+            Assert.AreEqual(expected, result, "CurrentPlayer has to have any legal moves");
+        }
+
+        [TestMethod]
+        public void TestIsInCheck_whenWhiteKingIsHittingByPawn_ItmusstSignal()
+        {
+            ChessBoard chessBoard = new ChessBoard();
+            PlayerColor playerColor = new PlayerColor();
+            playerColor = PlayerColor.White;
+            Piece hitterPiece = new Pawn(PlayerColor.Black);
+            chessBoard.WhiteKing.Parent.HitBy.Add(hitterPiece);
             bool useCache = false;
             bool expected = true;
 
             bool result = chessBoard.IsInCheck(playerColor, useCache);
 
-            Assert.AreEqual(expected, result, "Had to return true but it return false");
+            Assert.AreEqual(expected, result, "The white king was hit by black pawn");
         }
+
+
 
         [TestMethod]
         public void TestMove_LegalMove()
