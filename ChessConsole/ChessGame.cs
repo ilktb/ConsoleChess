@@ -109,14 +109,14 @@ namespace ChessConsole
         /// <summary>
         /// Draws the game
         /// </summary>
-        /// <param name="g">ConsoleGraphics object to draw with/to</param>
-        public void Draw(ConsoleGraphics g)
+        /// <param name="graphics">ConsoleGraphics object to draw with/to</param>
+        public void Draw(ConsoleGraphics graphics)
         {
             const int xCoordinateArea = 10;
             const int yCoordinateArea = 5;
             const int boardSize = 8;
 
-            g.FillAreaColoredCharacter(new CChar(' ', ConsoleColor.Black, ConsoleColor.DarkGray), xCoordinateArea, yCoordinateArea, boardSize, boardSize);
+            graphics.FillAreaColoredCharacter(new ColoredChar(' ', ConsoleColor.Black, ConsoleColor.DarkGray), xCoordinateArea, yCoordinateArea, boardSize, boardSize);
 
             //boardSize-1 - j (7-j) everywhere cuz it's reversed in chess
             for (int i = 0; i < boardSize; i++)
@@ -127,15 +127,15 @@ namespace ChessConsole
                     ChessBoard.Cell cell = board.GetCell(i, j);
                     if (cell.Piece != null)
                     {
-                        g.DrawTransparentBackground(cell.Piece.Char, (cell.Piece.Color == PlayerColor.White) ? ConsoleColor.White : ConsoleColor.Black, xCoordinateArea + i, yCoordinateArea + (boardSize - 1 - j));
+                        graphics.DrawTransparentBackground(cell.Piece.Char, (cell.Piece.Color == PlayerColor.White) ? ConsoleColor.White : ConsoleColor.Black, xCoordinateArea + i, yCoordinateArea + (boardSize - 1 - j));
                         if (cell.Piece.LegalMoves.Count == 0)
                         {
-                            g.SetBackgroundColor(ConsoleColor.DarkRed, xCoordinateArea + i, yCoordinateArea + (boardSize - 1 - j));
+                            graphics.SetBackgroundColor(ConsoleColor.DarkRed, xCoordinateArea + i, yCoordinateArea + (boardSize - 1 - j));
                         }
                     }
 
                     if (cell.HitBy.Contains(debugPiece))
-                        g.SetBackgroundColor(ConsoleColor.DarkMagenta, xCoordinateArea + i, yCoordinateArea + (boardSize - 1 - j));
+                        graphics.SetBackgroundColor(ConsoleColor.DarkMagenta, xCoordinateArea + i, yCoordinateArea + (boardSize - 1 - j));
                 }
             }
 
@@ -144,12 +144,12 @@ namespace ChessConsole
                 //Highlight legal moves
                 foreach (ChessBoard.Cell move in holdedParentNode.Piece.LegalMoves)
                 {
-                    g.SetBackgroundColor(ConsoleColor.DarkGreen, xCoordinateArea + move.X, yCoordinateArea + (boardSize - 1 - move.Y));
+                    graphics.SetBackgroundColor(ConsoleColor.DarkGreen, xCoordinateArea + move.X, yCoordinateArea + (boardSize - 1 - move.Y));
                 }
             }
 
             //Sets the cursor color -> yellow
-            g.SetBackgroundColor(ConsoleColor.DarkYellow, xCoordinateArea + cursorX, yCoordinateArea + (boardSize - 1 - cursorY));
+            graphics.SetBackgroundColor(ConsoleColor.DarkYellow, xCoordinateArea + cursorX, yCoordinateArea + (boardSize - 1 - cursorY));
 
 
             //Lighten for checkerboard pattern
@@ -157,7 +157,7 @@ namespace ChessConsole
             {
                 for (int j = 0; j < boardSize; j++)
                 {
-                    if ((i + j) % 2 == 1) g.LightenBackgroundColor(xCoordinateArea + i, yCoordinateArea + j);
+                    if ((i + j) % 2 == 1) graphics.LightenBackgroundColor(xCoordinateArea + i, yCoordinateArea + j);
                 }
             }
 

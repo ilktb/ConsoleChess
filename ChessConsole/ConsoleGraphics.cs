@@ -2,21 +2,21 @@
 
 namespace ChessConsole
 {
-    public struct CChar : IEquatable<CChar>
+    public struct ColoredChar : IEquatable<ColoredChar>
     {
         public ConsoleColor Foreground;
         public ConsoleColor Background;
    
         public char caracterValue;
 
-        public CChar(char c = ' ', ConsoleColor foreground = ConsoleColor.White, ConsoleColor background = ConsoleColor.Black)
+        public ColoredChar(char c = ' ', ConsoleColor foreground = ConsoleColor.White, ConsoleColor background = ConsoleColor.Black)
         {
             Foreground = foreground;
             Background = background;
             caracterValue = c;
         }
 
-        public bool Equals(CChar other)
+        public bool Equals(ColoredChar other)
         {
             if (other.Foreground == Foreground && other.Background == Background)
             {
@@ -28,12 +28,12 @@ namespace ChessConsole
             return false;
         }
 
-        public static bool operator==(CChar lhs, CChar rhs)
+        public static bool operator==(ColoredChar lhs, ColoredChar rhs)
         {
             return lhs.Equals(rhs);
         }
 
-        public static bool operator!=(CChar lhs, CChar rhs)
+        public static bool operator!=(ColoredChar lhs, ColoredChar rhs)
         {
             return !lhs.Equals(rhs);
         }
@@ -42,15 +42,15 @@ namespace ChessConsole
     public class ConsoleGraphics
     {
         /// First everything is drawn to the back buffer for double buffering purposes
-        private CChar[,] backBuffer;
+        private ColoredChar[,] backBuffer;
 
         /// Current console's colored character buffer
-        private CChar[,] frontBuffer;
+        private ColoredChar[,] frontBuffer;
 
         public ConsoleGraphics()
         {
-            backBuffer = new CChar[Console.BufferWidth, Console.BufferHeight];
-            frontBuffer = new CChar[Console.BufferWidth, Console.BufferHeight];
+            backBuffer = new ColoredChar[Console.BufferWidth, Console.BufferHeight];
+            frontBuffer = new ColoredChar[Console.BufferWidth, Console.BufferHeight];
         }
 
         #region DrawMethods
@@ -61,39 +61,39 @@ namespace ChessConsole
             {
                 for (int j = 0; j < backBuffer.GetLength(1); j++)
                 {
-                    backBuffer[i, j] = new CChar();
+                    backBuffer[i, j] = new ColoredChar();
                 }
             }
         }
 
-        public void Draw(CChar cchar, int x, int y)
+        public void Draw(ColoredChar coloredcharacter, int x, int y)
         {
-            backBuffer[x, y] = cchar;
+            backBuffer[x, y] = coloredcharacter;
         }
 
-        public void DrawTransparentBackground(char c, ConsoleColor foreground, int x, int y)
+        public void DrawTransparentBackground(char character, ConsoleColor foreground, int x, int y)
         {
-            backBuffer[x, y].caracterValue = c;
+            backBuffer[x, y].caracterValue = character;
             backBuffer[x, y].Foreground = foreground;
         }
 
-        public void DrawAreaColoredCharacters(CChar[,] cchars, int x, int y)
+        public void DrawAreaColoredCharacters(ColoredChar[,] coloredChars, int x, int y)
         {
-            for (int i = 0; i < cchars.GetLength(0); i++)
+            for (int i = 0; i < coloredChars.GetLength(0); i++)
             {
-                for (int j = 0; j < cchars.GetLength(1); j++)
+                for (int j = 0; j < coloredChars.GetLength(1); j++)
                 {
-                    backBuffer[x + i, y + j] = cchars[i, j];
+                    backBuffer[x + i, y + j] = coloredChars[i, j];
                 }
             }
         }
 
         public void DrawText(string textToDraw, ConsoleColor foreground, ConsoleColor background, int startingConsoleCoordX, int startingConsoleCoordY)
         {
-            CChar[,] area = new CChar[textToDraw.Length, 1];
+            ColoredChar[,] area = new ColoredChar[textToDraw.Length, 1];
             for (int i = 0; i < textToDraw.Length; i++)
             {
-                area[i, 0] = new CChar(textToDraw[i], foreground, background);
+                area[i, 0] = new ColoredChar(textToDraw[i], foreground, background);
             }
 
             DrawAreaColoredCharacters(area, startingConsoleCoordX, startingConsoleCoordY);
@@ -101,22 +101,22 @@ namespace ChessConsole
 
         public void DrawTextTrasparentBackground(string text, ConsoleColor foreground, int x, int y)
         {
-            CChar[,] area = new CChar[text.Length, 1];
+            ColoredChar[,] area = new ColoredChar[text.Length, 1];
             for (int i = 0; i < text.Length; i++)
             {
-                area[i, 0] = new CChar(text[i], foreground, backBuffer[x + i, y].Background);
+                area[i, 0] = new ColoredChar(text[i], foreground, backBuffer[x + i, y].Background);
             }
 
             DrawAreaColoredCharacters(area, x, y);
         }
 
-        public void FillAreaColoredCharacter(CChar cchar, int x, int y, int width, int height)
+        public void FillAreaColoredCharacter(ColoredChar coloredCharacter, int x, int y, int width, int height)
         {
             for (int i = 0; i < width; i++)
             {
                 for (int j = 0; j < height; j++)
                 {
-                    backBuffer[x + i, y + j] = cchar;
+                    backBuffer[x + i, y + j] = coloredCharacter;
                 }
             }
         }
@@ -127,7 +127,7 @@ namespace ChessConsole
             {
                 for (int j = 0; j < height; j++)
                 {
-                    backBuffer[x + i, y + j] = new CChar();
+                    backBuffer[x + i, y + j] = new ColoredChar();
                 }
             }
         }
