@@ -57,6 +57,7 @@ namespace ChessConsole
         }
 
         private Cell[,] cells;
+        public Cell[,] Cells { get => cells; set => cells = value; }
 
         public Cell EnPassant
         {
@@ -81,6 +82,7 @@ namespace ChessConsole
         public Piece BlackKing { get => blackKing; set => blackKing = value; }
         public Piece WhiteKing { get => whiteKing; set => whiteKing = value; }
         public bool InCheck { get => inCheck; set => inCheck = value; }
+        
 
         public ChessBoard()
         {
@@ -91,16 +93,16 @@ namespace ChessConsole
 
         public Cell GetCell(int x, int y)
         {
-            if (x < 0 || cells.GetLength(0) <= x)
+            if (x < 0 || Cells.GetLength(0) <= x)
             {
                 return null;
             }
-            if (y < 0 || cells.GetLength(1) <= y)
+            if (y < 0 || Cells.GetLength(1) <= y)
             {
                 return null;
             }
 
-            return cells[x, y];
+            return Cells[x, y];
         }
 
         #endregion
@@ -121,12 +123,12 @@ namespace ChessConsole
         public void ResetBoardState()
         {
             int boardSize = 8;
-            cells = new Cell[boardSize, boardSize];
+            Cells = new Cell[boardSize, boardSize];
             for (int i = 0; i < boardSize; i++)
             {
                 for (int j = 0; j < boardSize; j++)
                 {
-                    cells[i, j] = new Cell(this, i, j);
+                    Cells[i, j] = new Cell(this, i, j);
                 }
             }
 
@@ -149,34 +151,34 @@ namespace ChessConsole
         {
             if (color == PlayerColor.White)
             {
-                AddPiece(cells[0, 0], new Rook(PlayerColor.White));
-                AddPiece(cells[1, 0], new Knight(PlayerColor.White));
-                AddPiece(cells[2, 0], new Bishop(PlayerColor.White));
-                AddPiece(cells[3, 0], new Queen(PlayerColor.White));
-                AddPiece(cells[4, 0], (WhiteKing = new King(PlayerColor.White)));
-                AddPiece(cells[5, 0], new Bishop(PlayerColor.White));
-                AddPiece(cells[6, 0], new Knight(PlayerColor.White));
-                AddPiece(cells[7, 0], new Rook(PlayerColor.White));
+                AddPiece(Cells[0, 0], new Rook(PlayerColor.White));
+                AddPiece(Cells[1, 0], new Knight(PlayerColor.White));
+                AddPiece(Cells[2, 0], new Bishop(PlayerColor.White));
+                AddPiece(Cells[3, 0], new Queen(PlayerColor.White));
+                AddPiece(Cells[4, 0], (WhiteKing = new King(PlayerColor.White)));
+                AddPiece(Cells[5, 0], new Bishop(PlayerColor.White));
+                AddPiece(Cells[6, 0], new Knight(PlayerColor.White));
+                AddPiece(Cells[7, 0], new Rook(PlayerColor.White));
 
                 for (int i = 0; i <= 7; i++)
                 {
-                    AddPiece(cells[i, 1], new Pawn(PlayerColor.White));
+                    AddPiece(Cells[i, 1], new Pawn(PlayerColor.White));
                 }
             }
             else if (color == PlayerColor.Black)
             {
-                AddPiece(cells[0, 7], new Rook(PlayerColor.Black));
-                AddPiece(cells[1, 7], new Knight(PlayerColor.Black));
-                AddPiece(cells[2, 7], new Bishop(PlayerColor.Black));
-                AddPiece(cells[3, 7], new Queen(PlayerColor.Black));
-                AddPiece(cells[4, 7], (BlackKing = new King(PlayerColor.Black)));
-                AddPiece(cells[5, 7], new Bishop(PlayerColor.Black));
-                AddPiece(cells[6, 7], new Knight(PlayerColor.Black));
-                AddPiece(cells[7, 7], new Rook(PlayerColor.Black));
+                AddPiece(Cells[0, 7], new Rook(PlayerColor.Black));
+                AddPiece(Cells[1, 7], new Knight(PlayerColor.Black));
+                AddPiece(Cells[2, 7], new Bishop(PlayerColor.Black));
+                AddPiece(Cells[3, 7], new Queen(PlayerColor.Black));
+                AddPiece(Cells[4, 7], (BlackKing = new King(PlayerColor.Black)));
+                AddPiece(Cells[5, 7], new Bishop(PlayerColor.Black));
+                AddPiece(Cells[6, 7], new Knight(PlayerColor.Black));
+                AddPiece(Cells[7, 7], new Rook(PlayerColor.Black));
 
                 for (int i = 0; i <= 7; i++)
                 {
-                    AddPiece(cells[i, 6], new Pawn(PlayerColor.Black));
+                    AddPiece(Cells[i, 6], new Pawn(PlayerColor.Black));
                 }
             }
 
@@ -184,7 +186,7 @@ namespace ChessConsole
 
         public bool TurnStart(PlayerColor currentPlayer)
         {
-            foreach (Cell cell in cells)
+            foreach (Cell cell in Cells)
             {
                 cell.HitBy.Clear();
             }

@@ -88,8 +88,8 @@ namespace UnitTestChessConsole
         {
             ChessBoard parentChessBoard = new ChessBoard();
             ChessBoard chessBoard = new ChessBoard();
-            Cell from = new Cell(parentChessBoard,4,5);
-            Cell to = new Cell(parentChessBoard,3,4);
+            Cell from = new Cell(parentChessBoard, 4, 5);
+            Cell to = new Cell(parentChessBoard, 3, 4);
             from.Piece = new Pawn(PlayerColor.White);
             to.Piece = new Pawn(PlayerColor.White);
             to.Y = 7; // in the border
@@ -101,5 +101,5 @@ namespace UnitTestChessConsole
         }
     }
 
-    
+
 }
