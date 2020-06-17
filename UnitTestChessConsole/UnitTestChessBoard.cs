@@ -37,7 +37,7 @@ namespace UnitTestChessConsole
         }
 
         [TestMethod]
-        public void TestIsInCheck_whenWhiteKingIsHittingByPawn_ItmusstSignal()
+        public void TestIsInCheck_whenWhiteKingIsHittingByPawn_ItMustSignal()
         {
             ChessBoard chessBoard = new ChessBoard();
             PlayerColor playerColor = new PlayerColor();
@@ -53,7 +53,7 @@ namespace UnitTestChessConsole
         }
 
         [TestMethod]
-        public void TestIsInCheck_whenBlackKingIsHittingByPawn_ItmusstSignal()
+        public void TestIsInCheck_whenBlackKingIsHittingByPawn_ItMustSignal()
         {
             ChessBoard chessBoard = new ChessBoard();
             PlayerColor playerColor = new PlayerColor();
@@ -69,13 +69,22 @@ namespace UnitTestChessConsole
         }
 
         [TestMethod]
-        public void TestMove_LegalMove()
+        public void TestIsInCheck_whenWhiteKingIsNotHitByAnithing()
         {
+            ChessBoard chessBoard = new ChessBoard();
+            PlayerColor playerColor = new PlayerColor();
+            playerColor = PlayerColor.White;
+            bool useCache = false;
+            bool expected = false;
 
+            bool result = chessBoard.IsInCheck(playerColor, useCache);
+
+            Assert.AreEqual(expected, result, "The white king wasn't hit by anithing");
         }
 
+
         [TestMethod]
-        public void TestIsPromotable()
+        public void TestIsPromotable_whenThePawnIsOnOppositeBorder()
         {
             ChessBoard parentChessBoard = new ChessBoard();
             ChessBoard chessBoard = new ChessBoard();
@@ -83,10 +92,12 @@ namespace UnitTestChessConsole
             Cell to = new Cell(parentChessBoard,3,4);
             from.Piece = new Pawn(PlayerColor.White);
             to.Piece = new Pawn(PlayerColor.White);
+            to.Y = 7; // in the border
+            bool expected = true;
 
             bool result = chessBoard.IsPromotable(from, to);
 
-            Assert.IsTrue(result, "doesnt work well");
+            Assert.AreEqual(expected, result, "doesnt work well");
         }
     }
 
