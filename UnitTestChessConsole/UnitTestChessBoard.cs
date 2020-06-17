@@ -52,7 +52,21 @@ namespace UnitTestChessConsole
             Assert.AreEqual(expected, result, "The white king was hit by black pawn");
         }
 
+        [TestMethod]
+        public void TestIsInCheck_whenBlackKingIsHittingByPawn_ItmusstSignal()
+        {
+            ChessBoard chessBoard = new ChessBoard();
+            PlayerColor playerColor = new PlayerColor();
+            playerColor = PlayerColor.Black;
+            Piece hitterPiece = new Pawn(PlayerColor.White);
+            chessBoard.BlackKing.Parent.HitBy.Add(hitterPiece);
+            bool useCache = false;
+            bool expected = true;
 
+            bool result = chessBoard.IsInCheck(playerColor, useCache);
+
+            Assert.AreEqual(expected, result, "The black king was hit by white pawn");
+        }
 
         [TestMethod]
         public void TestMove_LegalMove()
