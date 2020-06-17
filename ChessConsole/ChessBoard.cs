@@ -213,6 +213,23 @@ namespace ChessConsole
 
             return anyLegalMove;
         }
+        private bool ValidateCastling(Piece piece, Cell move)
+        {
+            if (Math.Abs(move.X - piece.Parent.X) == 2)
+            {
+                //You can't castle in check
+                if (InCheck)
+                    return false;
+
+                //Check if some enemy hits the middle castling
+                foreach (Piece hitter in GetCell(move.X > piece.Parent.X ? move.X - 1 : move.X + 1, move.Y).HitBy)
+                {
+                    if (hitter.Color != piece.Color)
+                        return false;
+                }
+            }
+            return true;
+        }
 
         private bool IsMoveLegal(Piece piece, Cell move)
         {
@@ -227,19 +244,9 @@ namespace ChessConsole
                         return false;
                 }
 
-                //Validate castling
-                if (Math.Abs(move.X - piece.Parent.X) == 2)
+                if(!ValidateCastling(piece, move))
                 {
-                    //You can't castle in check
-                    if (InCheck)
-                        return false;
-
-                    //Check if some enemy hits the middle castling
-                    foreach (Piece hitter in GetCell(move.X > piece.Parent.X ? move.X - 1 : move.X + 1, move.Y).HitBy)
-                    {
-                        if (hitter.Color != piece.Color)
-                            return false;
-                    }
+                    return false;
                 }
             }
             else
@@ -272,6 +279,7 @@ namespace ChessConsole
 
             return true;
         }
+
 
         public bool IsInCheck(PlayerColor playerColor, bool useCache = true)
         {
