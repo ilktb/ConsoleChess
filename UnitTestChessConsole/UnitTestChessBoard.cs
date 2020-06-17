@@ -97,7 +97,7 @@ namespace UnitTestChessConsole
 
             bool result = chessBoard.IsPromotable(from, to);
 
-            Assert.AreEqual(expected, result, "doesnt work well");
+            Assert.AreEqual(expected, result, "The pawn is promotable.");
         }
     }
 
