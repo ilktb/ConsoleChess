@@ -106,10 +106,6 @@ namespace ChessConsole
             return playerState != PlayerState.AwaitPromote && cursorY > 0;
         }
 
-        /// <summary>
-        /// Draws the game
-        /// </summary>
-        /// <param name="graphics">ConsoleGraphics object to draw with/to</param>
         public void Draw(ConsoleGraphics graphics)
         {
             const int xCoordinateArea = 10;
@@ -160,19 +156,6 @@ namespace ChessConsole
                     if ((i + j) % 2 == 1) graphics.LightenBackgroundColor(xCoordinateArea + i, yCoordinateArea + j);
                 }
             }
-
-            //Promotion option menu
-            //if (playerState == PlayerState.AwaitPromote)
-            //{
-            //    g.DrawTextTrasparentBackground("Queen", promoteOption == PromoteOptions.Queen ? ConsoleColor.Yellow : ConsoleColor.White, 22, 7);
-            //    g.DrawTextTrasparentBackground("Rook", promoteOption == PromoteOptions.Rook ? ConsoleColor.Yellow : ConsoleColor.White, 22, 9);
-            //    g.DrawTextTrasparentBackground("Bishop", promoteOption == PromoteOptions.Bishop ? ConsoleColor.Yellow : ConsoleColor.White, 22, 11);
-            //    g.DrawTextTrasparentBackground("Knight", promoteOption == PromoteOptions.Knight ? ConsoleColor.Yellow : ConsoleColor.White, 22, 13);
-            //}
-            //else
-            //{
-            //    g.ClearArea(22, 7, 6, 7);
-            //}
         }
 
         #endregion

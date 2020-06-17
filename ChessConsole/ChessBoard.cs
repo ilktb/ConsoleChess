@@ -9,6 +9,7 @@ namespace ChessConsole
 {
     public class ChessBoard
     {
+        const int boardSize = 8;
         public class Cell
         {
             public ChessBoard Parent
@@ -122,7 +123,6 @@ namespace ChessConsole
 
         public void ResetBoardState()
         {
-            int boardSize = 8;
             Cells = new Cell[boardSize, boardSize];
             for (int i = 0; i < boardSize; i++)
             {
